@@ -3,22 +3,20 @@ name: Call API on PR Merge to Main
 on:
   push:
     branches:
-      - main
+      - main  # Triggers only when something is pushed to main (e.g., after a PR merge)
 
 jobs:
   call-api:
-    if: github.event.head_commit.message != 'Merge pull request'  # optional filter
     runs-on: ubuntu-latest
 
     steps:
       - name: Call API after PR merge to main
         run: |
-          curl -X POST https://webhook.site/c61d41b5-593d-4ed9-9861-c21808785a3f \
+          curl -X POST https://your-api-url.com/endpoint \
           -H "Content-Type: application/json" \
-      
           -d '{
-            "message": "PR merged to main main yaml api message",
-            "repo": "${{ github.repository }}",
+            "message": "PR merged to main",
+            "repository": "${{ github.repository }}",
             "commit": "${{ github.sha }}",
             "actor": "${{ github.actor }}"
           }'
