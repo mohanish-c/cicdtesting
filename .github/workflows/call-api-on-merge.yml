@@ -15,8 +15,9 @@ jobs:
           curl -X POST https://webhook.site/c61d41b5-593d-4ed9-9861-c21808785a3f \
           -H "Content-Type: application/json" \
           -d '{
-            "message": "PR merged to main",
-            "repository": "${{ github.repository }}",
-            "commit": "${{ github.sha }}",
-            "actor": "${{ github.actor }}"
+            "API-Message": "PR merged to main",
+            "Github-Repository": "${{ github.repository }}",
+            "Commit-Message": "${{ github.event.head_commit.message }}",
+            "Commit-ID": "${{ github.sha }}",
+            "Author": "${{ github.actor }}"
           }'
