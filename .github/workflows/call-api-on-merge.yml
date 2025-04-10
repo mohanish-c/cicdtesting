@@ -1,0 +1,18 @@
+name: Call API on PR Merge to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  call-api:
+    if: github.event.head_commit.message != 'Merge pull request'  # optional filter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call API after PR merge to main
+        run: |
+          curl -X POST https://your-api-url.com/endpoint \
+          -H "Content-Type: application/json" \
+          -d '{"message": "PR merged to main", "repo": "${{ github.repository }}"}'
