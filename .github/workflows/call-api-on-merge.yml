@@ -13,6 +13,12 @@ jobs:
     steps:
       - name: Call API after PR merge to main
         run: |
-          curl -X POST https://your-api-url.com/endpoint \
+          curl -X POST https://webhook.site/c61d41b5-593d-4ed9-9861-c21808785a3f \
           -H "Content-Type: application/json" \
-          -d '{"message": "PR merged to main", "repo": "${{ github.repository }}"}'
+      
+          -d '{
+            "message": "PR merged to main main yaml api message",
+            "repo": "${{ github.repository }}",
+            "commit": "${{ github.sha }}",
+            "actor": "${{ github.actor }}"
+          }'
