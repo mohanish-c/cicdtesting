@@ -6,6 +6,10 @@ import os
 
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
+project_id = os.getenv("PROJECT_ID")
+env_name = os.getenv("ENV_NAME")
+dpc_branch_name = os.getenv("DPC_BRANCH_NAME")
+
 ## Function to get the bearer token
 def get_token():
     token_url = "https://id.core.matillion.com/oauth/dpc/token"
@@ -34,7 +38,7 @@ def get_token():
 
 ## Function to Publish Artifacts
 def get_artifacts(token):
-    url = f"https://us1.api.matillion.com/dpc/v1/projects/94e19997-6afe-44de-82b2-880389d82996/artifacts"
+    url = f"https://us1.api.matillion.com/dpc/v1/projects/{project_id}/artifacts"
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     file_content = f"Artifact published at {current_time}"
     version_name = f'v_{current_time}'
@@ -48,8 +52,8 @@ def get_artifacts(token):
 
     headers = {
         'Authorization': f'Bearer {token}',
-        'environmentName': 'env_prod',
-        'branch': 'dev',
+        'environmentName': env_name,
+        'branch': dpc_branch_name,
         'versionName':  version_name
     }
 
