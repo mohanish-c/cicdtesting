@@ -8,7 +8,7 @@ client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 project_id = os.getenv("PROJECT_ID")
 env_name = os.getenv("ENV_NAME")
-dpc_branch_name = os.getenv("DPC_BRANCH_NAME")
+# dpc_branch_name = os.getenv("DPC_BRANCH_NAME")
 
 ## Function to get the bearer token
 def get_token():
@@ -53,7 +53,7 @@ def get_artifacts(token):
     headers = {
         'Authorization': f'Bearer {token}',
         'environmentName': env_name,
-        'branch': dpc_branch_name,
+        # 'branch': dpc_branch_name,
         'versionName':  version_name
     }
 
