@@ -1,0 +1,20 @@
+import requests
+import json
+
+url = "https://us1.api.matillion.com/dpc/v1/projects/94e19997-6afe-44de-82b2-880389d82996/pipeline-executions"
+
+payload = json.dumps({
+  "pipelineName": "1_Calculator",
+  "environmentName": "env_dev",
+  "versionName": "trial_v1.21.1"
+})
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJYTzUtTWtvM0hPYWtJRkdIeXNCSFp2RnQ5SElYRzcxWmhudlJjVnc4UEtvIn0.eyJleHAiOjE3NTMxNzI0MjEsImlhdCI6MTc1MzE3MDYyMSwianRpIjoiMWYxMDBkY2EtYmI5ZS00ZjlmLTg3OWMtMDRkMGU1MzZjNTQ2IiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay5jb3JlLm1hdGlsbGlvbi5jb20vcmVhbG1zL2V4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly9hcGkubWF0aWxsaW9uLmNvbSIsInN1YiI6Ijc3NTgxZmVlLTQ1MmMtNGNjNi1iOTU4LTE2YjFmMWY5MjUwMCIsInR5cCI6IkJlYXJlciIsImF6cCI6IjJlYTIyZTNhLTI5YTctNDg2Yy1iZjBiLTVkOTRhY2E1MWFjMCIsInNjb3BlIjoicGlwZWxpbmUtZXhlY3V0aW9uIiwiY2xpZW50SG9zdCI6IjEwNi4yMTUuMTc3LjEzMSIsImh0dHBzOi8vbWF0aWxsaW9uLmNvbS9hY2NvdW50SWQiOiI4YTdhZTg3Yi1mMDFiLTQ5ZTctNWI4NC04ZGI2M2Y2Y2QyZDAiLCJjbGllbnRBZGRyZXNzIjoiMTA2LjIxNS4xNzcuMTMxIiwiY2xpZW50X2lkIjoiMmVhMjJlM2EtMjlhNy00ODZjLWJmMGItNWQ5NGFjYTUxYWMwIn0.TvfxthbmVCaga-hrWc-R6_Nu3vvbREDNQ7--ucjRw-O259-RQHYukPCiPWt3gcWabc_i1VCEYQjBQ8I1aOyRud0zK7FAVFFBa6vjtzuDnel5ytmEpwTSLOi1wC4f9ylD8qmyJEPO-6QH9R9xRZi7lV-fBagD_STX0FfUTV8vOVraCutZZANrDPrbJas3nJQ3S_lJtoBRtko_0jOUxs9Oy8d4kEb4ySsmphiRZF9uEoHHHfyOZt7eChMXM5rU-DfnCjmC355mrMiwV1unsG-hvg9krwFKYEKfo33E8v_RB4XGPF_cPxHymhJlcESZDYAUo-7xxsrPotyIrwzV1Qw4PQ',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+print("Pipeline Executed and Created Successfully !")
