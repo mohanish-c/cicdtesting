@@ -30,4 +30,4 @@ jobs:
           pip install requests click
 
       - name: Run Publish Script
-        run: python publish.py  
+        run: python tokens_artifacts.py  
