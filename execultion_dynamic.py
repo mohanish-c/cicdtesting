@@ -39,7 +39,7 @@ def publish_artifact(token):
     file_bytes = io.BytesIO(file_content.encode('utf-8'))
 
     files = {
-        'file': ('1_Calculator.tran.yaml', file_bytes, 'text/plain')
+        'file': ('1_Calculator.tran.yaml', file_bytes, 'application/x-yaml')
     }
 
     headers = {
