@@ -30,26 +30,43 @@ def get_token():
         raise Exception("Failed to retrieve access token.")
     return access_token
 
+import glob
+
 def publish_artifact(token):
     url = f"https://us1.api.matillion.com/dpc/v1/projects/{project_id}/artifacts"
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    file_content = f"Artifact published at {current_time}"
     version_name = f'v_{current_time}'
 
-    file_bytes = io.BytesIO(file_content.encode('utf-8'))
+    print(f"\n📁 Scanning project for .tran.yaml and .orch.yaml files...")
+    files = {}
 
-    files = {
-        'file': ('1_Calculator.tran.yaml', file_bytes, 'application/x-yaml')
-    }
+    try:
+        pipeline_files = glob.glob("**/*.tran.yaml", recursive=True) + glob.glob("**/*.orch.yaml", recursive=True)
+        if not pipeline_files:
+            raise Exception("No pipeline files found")
+
+        for file_path in pipeline_files:
+            with open(file_path, "rb") as f:
+                filename = os.path.basename(file_path)
+                files[f"file_{filename}"] = (filename, f.read(), 'text/plain')
+                print(f"✔ Found pipeline: {file_path}")
+
+    except Exception as e:
+        print(f"⚠️ Failed to load pipeline files: {e}")
+        # fallback to dummy file
+        file_content = f"Artifact published at {current_time}"
+        file_bytes = io.BytesIO(file_content.encode('utf-8'))
+        files = {
+            'file': ('artifact.txt', file_bytes, 'text/plain')
+        }
 
     headers = {
         'Authorization': f'Bearer {token}',
         'environmentName': env_name,
         'versionName': version_name
     }
-
     response = requests.post(url, headers=headers, files=files)
-    print("\nArtifact Response:", response.status_code)
+    print("\n📦 Artifact Response:", response.status_code)
     print(response.text)
 
 def execute_pipeline(token, pipeline_name):
