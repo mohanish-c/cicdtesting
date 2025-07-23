@@ -1,0 +1,64 @@
+type: "transformation"
+version: "1.0"
+pipeline:
+  components:
+    M_STUDENT:
+      type: "table-input"
+      parameters:
+        componentName: "M_STUDENT"
+        database: "INTERNAL_TRAINING"
+        schema: "DBT_MKHAMBADKAR"
+        targetTable: "M_STUDENT"
+        columnNames:
+        - "ID"
+        - "NAME"
+        - "AGE"
+        - "CITY"
+        timeOffset: ""
+    Rename (ID->Rename_ID,Name->Rename->Rename_Name..):
+      type: "rename"
+      sources:
+      - "M_STUDENT"
+      parameters:
+        componentName: "Rename (ID->Rename_ID,Name->Rename->Rename_Name..)"
+        columnMapping:
+        - - "ID"
+          - "Rename_ID"
+        - - "NAME"
+          - "Rename_Name"
+        - - "AGE"
+          - "Rename_Age"
+        - - "CITY"
+          - "Rename_City"
+        includeInputColumns: "No"
+    Rewrite Table:
+      type: "rewrite-table"
+      sources:
+      - "Rename (ID->Rename_ID,Name->Rename->Rename_Name..)"
+      parameters:
+        componentName: "Rewrite Table"
+        warehouse: "[Environment Default]"
+        database: "INTERNAL_TRAINING"
+        schema: "DBT_MKHAMBADKAR"
+        targetTable: "dpc_demo_rename"
+        orderBy:
+      postProcessing:
+        updateOutputMessage:
+        updateScalarVariables:
+design:
+  components:
+    M_STUDENT:
+      position:
+        x: 300
+        "y": 50
+      tempMetlId: 1184069
+    Rename (ID->Rename_ID,Name->Rename->Rename_Name..):
+      position:
+        x: 592
+        "y": 48
+      tempMetlId: 1184072
+    Rewrite Table:
+      position:
+        x: 752
+        "y": 48
+      tempMetlId: 1184073
