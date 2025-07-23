@@ -37,7 +37,7 @@ def publish_artifact(token):
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     version_name = f'v_{current_time}'
 
-    print(f"\n📁 Scanning project for .tran.yaml and .orch.yaml files...")
+    print(f"\nScanning project for .tran.yaml and .orch.yaml files...")
     files = {}
 
     try:
@@ -48,8 +48,8 @@ def publish_artifact(token):
         for file_path in pipeline_files:
             with open(file_path, "rb") as f:
                 filename = os.path.basename(file_path)
-                files[f"file_{filename}"] = (filename, f.read(), 'text/plain')
-                print(f"✔ Found pipeline: {file_path}")
+                files[f"{filename}"] = (filename, f.read(), 'text/plain')
+                print(f"Found pipeline: {file_path}")
 
     except Exception as e:
         print(f"⚠️ Failed to load pipeline files: {e}")
@@ -66,7 +66,7 @@ def publish_artifact(token):
         'versionName': version_name
     }
     response = requests.post(url, headers=headers, files=files)
-    print("\n📦 Artifact Response:", response.status_code)
+    print("\n Artifact Response:", response.status_code)
     print(response.text)
 
 def execute_pipeline(token, pipeline_name):
