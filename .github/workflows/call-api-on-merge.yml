@@ -32,8 +32,7 @@ jobs:
 
       - name: Get list of changed pipeline files
         run: |
-          git fetch origin main
-          git diff --name-only origin/main...HEAD | grep -E '\.(orch|tran)\.yaml$' > changed_pipelines.txt || true
+          git diff --name-only HEAD^ HEAD | grep -E '\.(orch|tran)\.yaml$' > changed_pipelines.txt || true
           cat changed_pipelines.txt
 
       - name: Run Matillion artifact + pipeline execution
