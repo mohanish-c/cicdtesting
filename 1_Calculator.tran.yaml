@@ -93,7 +93,7 @@ pipeline:
         warehouse: "[Environment Default]"
         database: "INTERNAL_TRAINING"
         schema: "DBT_MKHAMBADKAR"
-        targetTable: "DPC_Test_1"
+        targetTable: "DPC_Test"
         orderBy:
       postProcessing:
         updateOutputMessage: "Table Created Succefully."

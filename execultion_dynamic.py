@@ -86,19 +86,27 @@ def get_changed_pipelines():
 
 def main():
     try:
+        # 🔹 Step 1: Detect pipeline changes first
+        changed_pipelines = get_changed_pipelines()
+        if not changed_pipelines:
+            print("No pipeline changes detected. Skipping artifact creation and execution.")
+            return
+
+        print("\nChanged Pipelines Detected:", changed_pipelines)
+
+        # 🔹 Step 2: Get access token
         token = get_token()
+
+        # 🔹 Step 3: Publish the artifact (with latest changes from merged PR)
         publish_artifact(token)
 
-        changed_pipelines = get_changed_pipelines()
-        if changed_pipelines:
-            print("\nChanged Pipelines Detected:", changed_pipelines)
-            for pipeline_name in changed_pipelines:
-                execute_pipeline(token, pipeline_name)
-        else:
-            print("No pipeline changes detected.")
+        # 🔹 Step 4: Execute each changed pipeline
+        for pipeline_name in changed_pipelines:
+            execute_pipeline(token, pipeline_name)
 
     except Exception as e:
         print(f"\nExecution failed: {e}")
+
 
 if __name__ == "__main__":
     main()
