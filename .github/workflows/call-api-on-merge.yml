@@ -1,4 +1,4 @@
-name: Run tokens_artifacts.py on PR Merge to Main
+name: Create Artifact and Execute Changed Pipelines
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  run-script:
+  matillion-deploy:
     runs-on: ubuntu-latest
 
     env:
@@ -16,8 +16,10 @@ jobs:
       ENV_NAME: ${{ secrets.ENV_NAME }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # ensures full history for git diff
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -26,8 +28,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install requests click
+          pip install requests
 
-      - name: Run Publish Script
-        run: python tokens_artifacts.py  
+      - name: Get list of changed pipeline files
+        run: |
+          git fetch origin main
+          git diff --name-only origin/main...HEAD | grep -E '\.(orch|tran)\.yaml$' > changed_pipelines.txt || true
+          cat changed_pipelines.txt
+
+      - name: Run Matillion artifact + pipeline execution
+        run: python execultion_dynamic.py
