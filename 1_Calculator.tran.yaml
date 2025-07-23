@@ -1,0 +1,142 @@
+type: "transformation"
+version: "1.0"
+pipeline:
+  components:
+    M_STUDENT:
+      type: "table-input"
+      parameters:
+        componentName: "M_STUDENT"
+        database: "INTERNAL_TRAINING"
+        schema: "DBT_MKHAMBADKAR"
+        targetTable: "M_STUDENT"
+        columnNames:
+        - "ID"
+        - "NAME"
+        - "AGE"
+        - "CITY"
+        timeOffset: ""
+    CITY_ShortForm:
+      type: "fixed-flow"
+      parameters:
+        componentName: "CITY_ShortForm"
+        columns:
+        - - "City"
+          - "VARCHAR"
+          - ""
+          - ""
+        - - "City_SF"
+          - "VARCHAR"
+          - ""
+          - ""
+        values:
+        - - "Nagpur"
+          - "NGP"
+        - - "Kanpur"
+          - "KNP"
+        - - "Gwallior"
+          - "GLR"
+        - - "Bhopal"
+          - "BPL"
+        - - "Indonesia"
+          - "INDS"
+    Left Join:
+      type: "join"
+      sources:
+      - "CITY_ShortForm"
+      - "M_STUDENT"
+      parameters:
+        componentName: "Left Join"
+        mainTable: "M_STUDENT"
+        mainTableAlias: "City"
+        joins:
+        - - "CITY_ShortForm"
+          - "City_SF"
+          - "Left"
+        joinExpressions:
+        - - "\"City\".\"CITY\"=\"City_SF\".\"City\""
+          - "City_Left_City_SF"
+        columnMappings:
+        - - "City.ID"
+          - "ID"
+        - - "City.NAME"
+          - "NAME"
+        - - "City.AGE"
+          - "AGE"
+        - - "City.CITY"
+          - "CITY"
+        - - "City_SF.City"
+          - "City"
+        - - "City_SF.City_SF"
+          - "City_SF"
+    Calculator 0:
+      type: "calculator"
+      sources:
+      - "Left Join"
+      parameters:
+        componentName: "Calculator 0"
+        includeInputColumns: "No"
+        calculations:
+        - - "\"ID\""
+          - "Student_ID"
+        - - "\"NAME\"||' '||'Calculator'"
+          - "Student_Name"
+        - - "\"AGE\"*10"
+          - "Student_Age"
+        - - "\"City_SF\""
+          - "Student_City"
+    Rewrite Table:
+      type: "rewrite-table"
+      sources:
+      - "Calculator 0"
+      parameters:
+        componentName: "Rewrite Table"
+        warehouse: "[Environment Default]"
+        database: "INTERNAL_TRAINING"
+        schema: "DBT_MKHAMBADKAR"
+        targetTable: "DPC_Test"
+        orderBy:
+      postProcessing:
+        updateOutputMessage: "Table Created Succefully."
+        updateScalarVariables:
+design:
+  components:
+    M_STUDENT:
+      position:
+        x: 192
+        "y": 96
+      tempMetlId: 1191019
+    CITY_ShortForm:
+      position:
+        x: 192
+        "y": 256
+      tempMetlId: 1191082
+    Left Join:
+      position:
+        x: 407
+        "y": 175
+      tempMetlId: 1191150
+    Calculator 0:
+      position:
+        x: 608
+        "y": 176
+      tempMetlId: 1191164
+    Rewrite Table:
+      position:
+        x: 770
+        "y": 180
+      tempMetlId: 1191165
+  notes:
+    "1191297":
+      position:
+        x: 690
+        "y": -40
+      size:
+        height: 198
+        width: 270
+      theme: "yellow"
+      content: |-
+        **Renaming Earlier column with New Name**
+
+        Student_ID, Student_Name, Student_Age, Student_City
+
+        City in Short_Form
